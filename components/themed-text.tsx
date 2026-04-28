@@ -1,5 +1,7 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
+import { Colors, Fonts } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 export type ThemedTextProps = TextProps & {
@@ -15,17 +17,18 @@ export function ThemedText({
   type = 'default',
   ...rest
 }: ThemedTextProps) {
+  const theme = useColorScheme() ?? 'light';
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
   return (
     <Text
       style={[
         { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
+        type === 'default' ? [styles.default, { fontFamily: Fonts.sans }] : undefined,
+        type === 'title' ? [styles.title, { fontFamily: Fonts.sans }] : undefined,
+        type === 'defaultSemiBold' ? [styles.defaultSemiBold, { fontFamily: Fonts.sans }] : undefined,
+        type === 'subtitle' ? [styles.subtitle, { fontFamily: Fonts.sans }] : undefined,
+        type === 'link' ? [styles.link, { color: Colors[theme].tint, fontFamily: Fonts.sans }] : undefined,
         style,
       ]}
       {...rest}
@@ -55,6 +58,5 @@ const styles = StyleSheet.create({
   link: {
     lineHeight: 30,
     fontSize: 16,
-    color: '#0a7ea4',
   },
 });
